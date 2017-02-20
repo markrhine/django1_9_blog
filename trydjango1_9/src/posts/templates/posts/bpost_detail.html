@@ -1,0 +1,44 @@
+{% extends "posts/base.html" %}
+{% load urlify %}
+
+{% block mycontent %}
+
+<div class="row">
+<div class="col-sm-8 col-sm-offset-2">
+	<h3>{{ postInstance.title }}
+	{% if postInstance.is_draft %}
+	<span style="color:red; font-size:0.7em"><strong> [Draft]</strong></span>
+	{% endif %}
+	</h3>
+
+
+	<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_url }}">
+		Facebook
+	</a>
+
+	<a href="https://twitter.com/home?status={{ postInstance.content|truncatechars:80|urlify }}%20{{ request.build_absolute_url }}">
+		Twitter
+	</a>
+
+	<a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_url }}&title={{ postInstance.title|urlify }}&summary={{ postInstance.content|truncatechars:120|urlify}}&source=h{{ request.build_absolute_url }}">
+		Linkedin
+	</a>
+
+	<p>{{ postInstance.content|linebreaks }}</p>
+	{% if postInstance.image %}
+	<img src="{{ postInstance.image.url }}" class="img-responsive" />
+	{% endif %}
+	<br>
+	<br>
+	<p><small>updated: {{ postInstance.updated }}</small></p>
+	<p><small>created: {{ postInstance.timestamp }}</small></p>
+	<p><small>published: {{ postInstance.publish_date }}</small></p>
+	{% if postInstance.user_created_by %}
+	<p><small>author: {{ postInstance.user_created_by }}</small></p>
+	{% endif %}
+	<br/>
+
+</div>
+</div>
+
+{% endblock %}

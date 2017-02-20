@@ -1,0 +1,79 @@
+
+{% extends "posts/base.html" %}
+
+{% load staticfiles %}
+
+
+{% block mycontent %}
+<div class="row">
+<div class="col-sm-8 col-sm-offset-2">
+  <h1>{{ title }}</h1>
+</div>
+</div>
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+
+    <form method="GET" action="">
+      <input type="text" name="q" placeholder="Search Posts" {% if qCache %}value={{ qCache }}{% endif %}>
+      <input type="submit" value="Search">
+    </form>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <img src='{% static "img/fbook.png" %}' class="img-responsive center-block img-rounded" /> <!--/static/img/fbook.png -->
+  </div>
+</div>
+
+{% for obj in object_list %}
+<!-- each obj is a BPOST model object -->
+
+<!-- thumbnail component fron bootstrap -->
+<div class="row">
+  <div class="col-sm-8 col-sm-offset-2">
+    <div class="thumbnail">
+      {% if obj.image %}
+      <img src="{{ obj.image.url }}" class="img-responsive" />
+      {% endif %}
+      <div class="caption">
+        <h3><a href='{{ obj.get_absolute_url }}'>{{ obj.title }} </a>
+        {% if obj.is_draft %}
+        <span style="color:red; font-size:0.7em"><strong> [Draft]</strong></span>
+        {% endif %}
+        {% if obj.publish_date > today %}
+        <span style="color:orange; font-size:0.7em"><strong> [Future Post]</strong></span>
+        {% endif %}
+        </h3>
+        <p><small>created: {{ obj.timestamp|timesince }} ago</small></p>
+        <p><small>published: {{ obj.publish_date }}</small></p>
+        {% if obj.user_created_by %}
+        <p><small>author: {{ obj.user_created_by }} </small></p>
+        {% endif %}
+        <p>{{ obj.content|linebreaks|truncatechars:200 }}</p>
+        <p><a href='{{ obj.get_absolute_url }}' class="btn btn-primary" role="button">View</a> </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endfor %}
+
+<!--Bootstrap code for pagination component . Copied from django docs (made minor changes)
+Need to include url parameters for page request & search box (q), so you can switch pages based on same query list results-->
+<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{page_request_var}}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ qCache }}{% endif %}">previous &nbsp;</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{page_request_var}}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ qCache }}{% endif %}"> &nbsp; next</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

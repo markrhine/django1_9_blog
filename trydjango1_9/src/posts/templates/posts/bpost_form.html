@@ -1,0 +1,21 @@
+{% extends "posts/base.html" %}
+
+{% block mycontent %}
+
+<!-- bpostForm has title & content inputs, need to add submit button
+action="" means render same web page url.
+csrf_token is django's way of security-->
+<div class="col-sm-8 col-sm-offset-2">
+<h1>New Blog Post Form</h1>
+
+<form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+
+    {{ bpostForm.as_p }}
+
+    <input type="submit" class="btn btn-default" value="Create"/>
+
+</form>
+</div>
+
+
+{% endblock %}

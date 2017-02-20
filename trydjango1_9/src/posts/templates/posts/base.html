@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<!--DOCTYPE HTML -->
+<html>
+
+<head>
+  <!-- Latest compiled and minified bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- Optional bootstrap theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+   integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <!-- 'static' template tag will prefix the specified path with STATIC_URL
+  Need to {% load staticfiles %} first-->
+  <link rel='stylesheet' href='{% static "css/base.css" %}'/>
+  <!--<link rel='stylesheet' href='/static/css/base.css' /> same thing!-->
+</head>
+
+<body>
+  {% if messages %}
+  <!-- IF there were any message objects in views.py that rendered this html:
+  make a list of the messages. give each message a class = to its tag from views.py-->
+
+  	<ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">
+  				<!--if tag for this message == "html_safe", then add |safe filter to message,
+  				which means you dont want django to auto-escape (you're saying its safe as-is),  otherwise
+  			   just display message with django auto-escapings. -->
+  				{% if "html_safe" in message.tags %}
+  					{{ message|safe }}
+  				{% else %}
+  					{{ message }}
+  				{% endif %}
+  			</li>
+      {% endfor %}
+    </ul>
+
+  {% endif %}
+
+  <div class="container">
+    <h1 style="background-color:#A9BCF5">Welcome to my Blog, Testdjango1.9</h1>
+  </div>
+  <div class="container">
+    {% block mycontent %}
+
+    {% endblock %}
+
+  </div>
+
+  <!-- Latest compiled and minified bootstrap JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+  integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+  crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
